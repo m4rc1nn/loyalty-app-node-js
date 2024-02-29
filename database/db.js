@@ -18,6 +18,7 @@ db.sequelize = sequelize;
 // Import models
 db.Card = require("../models/Card.js")(sequelize, Sequelize);
 db.User = require("../models/User.js")(sequelize, Sequelize);
+db.Category = require("../models/Category.js")(sequelize, Sequelize);
 db.Company = require("../models/Company.js")(sequelize, Sequelize);
 db.Action = require("../models/Action.js")(sequelize, Sequelize);
 db.Reward = require("../models/Reward.js")(sequelize, Sequelize);

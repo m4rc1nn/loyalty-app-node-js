@@ -25,6 +25,10 @@ module.exports = (sequelize) => {
 	);
 	Company.associate = (models) => {
 		Company.hasMany(models.Card, { foreignKey: "companyId", as: "cards" });
+		Company.belongsTo(models.Category, {
+			foreignKey: "categoryId",
+			as: "category",
+		});
 	};
 	return Company;
 };

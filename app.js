@@ -22,6 +22,8 @@ const tempCodePostRouter = require("./routes/temp-code/POST/route.js");
 
 const userGetRouter = require("./routes/user/GET/route.js");
 
+const categoryGetRouter = require("./routes/category/GET/route.js")
+
 const app = express();
 
 app.use(cors());
@@ -41,6 +43,7 @@ app.use("/api", rewardPostRouter);
 app.use("/api", tempCodeGetRouter);
 app.use("/api", tempCodePostRouter);
 app.use("/api", userGetRouter);
+app.use("/api", categoryGetRouter);
 
 db.sequelize.sync({ alter: true }).then(() => {
     app.listen(process.env.PORT, () => {

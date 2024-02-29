@@ -18,7 +18,7 @@ router.post(
         body("email", "Invalid email").isEmail(),
         body("password", "Password must be at least 6 characters long").isLength({ min: 6 }),
         body("name", "Name is required").not().isEmpty(),
-        // Check if password and confirmedPassword match
+        body("categoryId", "Category is required").not().isEmpty(),
         check("confirmedPassword", "Passwords do not match").custom((value, { req }) => value === req.body.password),
     ],
     async (req, res) => {
@@ -30,9 +30,19 @@ router.post(
             });
         }
 
-        const { email, password, name } = req.body; // Destructure the needed fields from the request body
+        const { email, password, name, categoryId } = req.body; // Destructure the needed fields from the request body
 
         try {
+            const existingCategory = await db.Category.findOne({where: {
+                id: categoryId
+            }});
+
+            if(!existingCategory) {
+                return res.status(400).json({
+                    type: "ERROR",
+                    message: "Invalid category",
+                });
+            }
             // Check if company already exists
             const existingCompany = await db.Company.findOne({
                 where: { email },
@@ -53,10 +63,11 @@ router.post(
                 email,
                 password: hashedPassword,
                 name,
+                categoryId
             });
 
             const token = jwt.sign({ company: company }, process.env.JWT_SECRET, {
-                expiresIn: "7d", // Token będzie ważny przez 1 dzień
+                expiresIn: "24h", // Token będzie ważny przez 1 dzień
             });
 
             return res.status(201).json({
@@ -64,7 +75,7 @@ router.post(
                 company: {
                     id: company.id,
                     email: company.email,
-                    name: company.name,
+                    name: company.name
                 },
                 token: token,
             });
@@ -115,7 +126,7 @@ router.post(
             }
 
             const token = jwt.sign({ company: company }, process.env.JWT_SECRET, {
-                expiresIn: "7d", // Token będzie ważny przez 1 dzień
+                expiresIn: "24h", // Token będzie ważny przez 1 dzień
             });
 
             // Successfully logged in
@@ -161,7 +172,7 @@ router.post("/auth/user/login", [body("email").isEmail(), body("authToken").isSt
 
         // Wygeneruj token JWT
         const token = jwt.sign({ user: user }, process.env.JWT_SECRET, {
-            expiresIn: "7d", // Token będzie ważny przez 7 dni
+            expiresIn: "24h", // Token będzie ważny przez 7 dni
         });
 
         // Zwróć odpowiedź zawierającą token i dane użytkownika

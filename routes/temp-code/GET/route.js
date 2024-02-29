@@ -23,9 +23,22 @@ router.get("/temp-code/:code", async (req, res) => {
             });
         }
 
+        const user = await db.User.findOne({
+            where: {
+                id: tempCode.userId
+            }
+        })
+
+        if (!user) {
+            return res.status(404).json({
+                type: "ERROR",
+                message: "Code not found or has expired",
+            });
+        }
+
         return res.status(200).json({
             type: "SUCCESS",
-            tempCode: tempCode,
+            user: user,
         });
     } catch (error) {
         return res.status(500).json({

@@ -32,6 +32,10 @@ router.get("/user", checkUserToken, async (req, res) => {
                             model: db.Action,
                             as: "actions", // Assuming the association is defined in your models
                         },
+                        {
+                            model: db.Category,
+                            as: "category",
+                        },
                     ],
                 },
             ],

@@ -43,4 +43,21 @@ router.get("/company/cards", checkCompanyToken, async (req, res) => {
 	}
 });
 
+router.get("/companies", async (req, res) => {
+	try {
+		const companies = await db.Company.findAll({
+			include: ["category"], 
+		});
+
+		return res
+			.status(200)
+			.json({ type: "SUCCESS", comapnies: companies });
+	} catch (error) {
+		return res.status(500).json({
+			type: "ERROR",
+			message: error.message,
+		});
+	}
+})
+
 module.exports = router;

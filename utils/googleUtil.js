@@ -1,10 +1,10 @@
 const { OAuth2Client } = require("google-auth-library");
-const client = new OAuth2Client("529713454793-b4kpmhjp0htl668i7dq72rl70v16isf8.apps.googleusercontent.com");
+const client = new OAuth2Client(""); 
 
 module.exports.verify = async (token) => {
     const ticket = await client.verifyIdToken({
         idToken: token,
-        audience: "529713454793-b4kpmhjp0htl668i7dq72rl70v16isf8.apps.googleusercontent.com", // Podaj tu swój Client ID z konfiguracji OAuth 2.0 w Google Cloud Console
+        audience: "", //OAuth 2.0 ClientId
     });
     const payload = ticket.getPayload();
     const userid = payload["sub"]; // ID użytkownika w Google
